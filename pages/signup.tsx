@@ -10,6 +10,7 @@ import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { useRouter } from "next/router";
 import Meta from "../components/Meta";
+import axiosClient from "../config/axiosClient";
 
 interface Inputs {
   name: string;
@@ -42,16 +43,12 @@ const Signup = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       if (password === confirmPassword) {
-        const res = await axios.post(
-          "http://localhost:3000/api/auth/signup",
-          data,
-          {
-            headers: {
-              Accecpt: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        const res = await axiosClient.post("auth/signup", data, {
+          headers: {
+            Accecpt: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
 
         if (res.status === 201) {
           localStorage.setItem("email", res.data.user.email);
