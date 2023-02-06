@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useState } from "react";
+import axiosClient from "../config/axiosClient";
 
 export const CartContext = createContext<any>({});
 
@@ -8,7 +9,7 @@ export const CartContextProvider = ({ children }) => {
 
   const getItems = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3000/api/users/cart");
+      const { data } = await axiosClient.get("users/cart");
       setCartCount(data);
     } catch (err) {
       console.log(err.response.data.error);
