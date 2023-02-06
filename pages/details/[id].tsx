@@ -32,6 +32,7 @@ interface Session {
 
 const ProductDetails = ({ product }: Props) => {
   const [quantity, setQuantity] = useState(1);
+  const [loading, setLoading] = useState(false);
   const [size, setSize] = useState("");
   const router = useRouter();
   const { id } = useRouter().query;
@@ -54,6 +55,7 @@ const ProductDetails = ({ product }: Props) => {
   const handleAddToCart = async () => {
     try {
       if (sessions) {
+        setLoading(true);
         const itemData = {
           productId: id,
           userId: sessions.user.id,
@@ -75,6 +77,7 @@ const ProductDetails = ({ product }: Props) => {
             progress: undefined,
             theme: "colored",
           });
+          setLoading(false);
         }
       } else {
         router.replace("/login");
@@ -177,7 +180,7 @@ const ProductDetails = ({ product }: Props) => {
               </button>
               <div className="w-full" onClick={handleAddToCart}>
                 <CustomButton style="bg-[#1D2C3B] w-full max-w-[260px] text-white py-2 rounded-md capitalize">
-                  add to Bag
+                  {loading ? "Adding..." : "add to Bag"}
                 </CustomButton>
               </div>
             </div>
