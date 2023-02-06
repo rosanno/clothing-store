@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id               String            @id @default(cuid())
+  createdAt        DateTime          @default(now())
+  email            String            @unique
+  emailVerified    DateTime?
+  name             String?
+  image            String?
+  phone            String?
+  password         String?
+  role             Role              @default(USER)
+  review           Review[]
+  accounts         Account[]
+  cart             CartItems[]
+  sessions         Session[]
+  favorites        Favorites[]
+  userVerification UserVerification?
+  address          Address[]
+
+  @@map(name: "users")
+}
+
+model Address {
+  id           Int     @id @default(autoincrement())
+  house        String
+  province     String
+  city         String
+  village      String
+  label        String
+  isDefault    Boolean @default(false)
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+}
+
+model UserVerification {
+  id               Int      @id @default(autoincrement())
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId           String   @unique
+  verificationCode String
+  createdAt        DateTime @default(now())
+  expiresAt        DateTime
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Products {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String
+  price       String
+  productImg  String
+  color       Color[]
+  size        Size[]
+  review      Review[]
+  categories  Categories[]
+  cartItems   CartItems[]
+  createdAt   DateTime     @default(now())
+  favorites   Favorites?
+}
+
+model Orders {
+  id              Int      @id @default(autoincrement())
+  userId          String
+  customerId      String
+  paymentIntentId String
+  products        Json?
+  subtotal        Int
+  total           Int
+  shipping        Json?
+  delivery_status String?
+  payment_status  String
+  createdAt       DateTime @default(now())
+}
+
+model Favorites {
+  id         Int       @id @default(autoincrement())
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products   Products? @relation(fields: [productsId], references: [id], onDelete: Cascade)
+  productsId Int       @unique
+  userId     String
+  isFavorite Boolean?  @default(false)
+}
+
+model CartItems {
+  id         Int       @id @default(autoincrement())
+  quantity   Int?
+  total      Int?      @default(0)
+  subTotal   Int?      @default(0)
+  size       String?
+  color      String?   @default("")
+  user       User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Products   Products? @relation(fields: [productsId], references: [id], onDelete: Cascade)
+  productsId Int
+  userId     String
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+}
+
+model Categories {
+  id         Int       @id @default(autoincrement())
+  category   String
+  products   Products? @relation(fields: [productsId], references: [id], onDelete: Cascade)
+  productsId Int?
+}
+
+model Color {
+  id         Int       @id @default(autoincrement())
+  color      String
+  Products   Products? @relation(fields: [productsId], references: [id], onDelete: Cascade)
+  productsId Int?
+}
+
+model Size {
+  id         Int       @id @default(autoincrement())
+  size       String
+  Products   Products? @relation(fields: [productsId], references: [id], onDelete: Cascade)
+  productsId Int?
+}
+
+model Review {
+  id         Int       @id @default(autoincrement())
+  review     String
+  rating     Int
+  createdAt  DateTime  @default(now())
+  Products   Products? @relation(fields: [productsId], references: [id], onDelete: Cascade)
+  productsId Int?
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
