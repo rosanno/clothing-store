@@ -43,5 +43,13 @@ export const requestNewVerification = async (
           </p>`,
   };
 
-  transport.sendMail(message);
+  await new Promise((resolve, reject) => {
+    transport.sendMail(message, (err, info) => {
+      if (err) {
+        console.log(err);
+      } else {
+        resolve(info);
+      }
+    });
+  });
 };
