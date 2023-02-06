@@ -65,7 +65,7 @@ const ProductCard = (props: Products) => {
           ) : (
             <AiOutlineHeart
               size={20}
-              className="text-gray-400"
+              className="text-gray-400 hover:text-rose-400"
               onClick={() => handleFovorites(props.id)}
             />
           )}
