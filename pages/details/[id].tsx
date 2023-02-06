@@ -140,9 +140,9 @@ const ProductDetails = ({ product }: Props) => {
                 </h2>
                 <div>
                   <select className="text-xs font-poppins outline-none ring-1 ring-gray-300 rounded-md p-1">
-                    {product.color.map((c) => (
+                    {product?.color.map((c) => (
                       <option key={c.id} value={`${c.color}`}>
-                        {c.color}
+                        {c?.color}
                       </option>
                     ))}
                   </select>
