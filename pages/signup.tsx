@@ -11,6 +11,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { useRouter } from "next/router";
 import Meta from "../components/Meta";
 import axiosClient from "../config/axiosClient";
+import { Oval } from "react-loader-spinner";
 
 interface Inputs {
   name: string;
@@ -39,6 +40,7 @@ const Signup = () => {
     name: "password",
   });
   const confirmPassword = useWatch({ control, name: "confirm_password" });
+  const [loading, setLoading] = useState(false);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -142,7 +144,6 @@ const Signup = () => {
             <input
               type="text"
               {...register("name", { required: "Name is required." })}
-              placeholder="Enter your name"
               className={`ring-1 ring-gray-300 rounded-md py-2 px-3 outline-none ${
                 errors.name && "border border-rose-600"
               }`}
@@ -253,12 +254,24 @@ const Signup = () => {
               </p>
             )}
           </div>
-          <button
-            type="submit"
-            className="bg-[#1C2534] w-full text-white py-2 rounded-md mt-6 font-poppins"
-          >
-            Sign up
-          </button>
+          {loading ? (
+            <div className="flex justify-center">
+              <Oval
+                height={25}
+                width={25}
+                color="#9387d4"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+                ariaLabel="oval-loading"
+                secondaryColor="#28b1ec"
+                strokeWidth={2}
+                strokeWidthSecondary={2}
+              />
+            </div>
+          ) : (
+            <span className="block py-1">Sign up</span>
+          )}
         </form>
         <p className="text-gray-400 text-sm mt-2">
           Have an account?{" "}
