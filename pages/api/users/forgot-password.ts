@@ -57,7 +57,13 @@ export default async function handler(
                       </p>`,
         };
 
-        transport.sendMail(message);
+        transport.sendMail(message, (err, data) => {
+          if (err) {
+            res.send("error" + JSON.stringify(err));
+          } else {
+            console.log("mail send");
+          }
+        });
 
         return res.send(200);
       }
