@@ -227,23 +227,11 @@ const Navbar = () => {
           <IoClose size={25} />
         </div>
         <ul className="mt-28">
-          <li className="listItem">
-            <Link href="/home">Home</Link>
-          </li>
-          <li className="listItem">
-            <Link href="/Shop" onClick={() => setIsSidebarOpen(false)}>
-              Shop
-            </Link>
-          </li>
-          <li className="listItem">
-            <Link href="/home">Brand</Link>
-          </li>
-          <li className="listItem">
-            <Link href="/home">Woman</Link>
-          </li>
-          <li className="listItem">
-            <Link href="/home">Man</Link>
-          </li>
+          {Items.map(({ name, path, query }) => (
+            <div key={name} onClick={() => setIsSidebarOpen(false)}>
+              <NavItems name={name} path={path} router={router} query={query} />
+            </div>
+          ))}
         </ul>
       </div>
 
