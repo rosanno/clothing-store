@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import AuthLayout from "../components/Layout/AuthLayout";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { GetServerSideProps } from "next";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import Meta from "../components/Meta";
+import { Oval } from "react-loader-spinner";
 
 interface Inputs {
   email: string;
@@ -24,8 +25,10 @@ const Login = () => {
     control,
     formState: { errors },
   } = useForm<Inputs>();
+  const [loading, setLoading] = useState(false);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true);
     const status = await signIn("credentials", {
       redirect: false,
       email: data.email,
@@ -45,6 +48,8 @@ const Login = () => {
         theme: "colored",
       });
     }
+
+    setLoading(false);
 
     if (status.ok) router.push(status.url);
   };
@@ -125,9 +130,27 @@ const Login = () => {
           </div>
           <button
             type="submit"
+            disabled={loading ? true : false}
             className="bg-[#1C2534] w-full text-white py-2 rounded-md mt-6 font-poppins"
           >
-            Sign in
+            {loading ? (
+              <div className="flex justify-center">
+                <Oval
+                  height={25}
+                  width={25}
+                  color="#9387d4"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                  ariaLabel="oval-loading"
+                  secondaryColor="#28b1ec"
+                  strokeWidth={2}
+                  strokeWidthSecondary={2}
+                />
+              </div>
+            ) : (
+              <span className="block py-1">Sign in</span>
+            )}
           </button>
         </form>
         <div className="mt-6">
