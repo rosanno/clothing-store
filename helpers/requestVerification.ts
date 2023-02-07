@@ -14,6 +14,8 @@ export const requestNewVerification = async (
       pass: process.env.NEXT_PUBLIC_GMAIL_APP_PASSWORD,
     },
   });
+
+  console.log(process.env.NEXT_PUBLIC_GMAIL_ADDRESS);
   const hashCode = await verificationCode(name);
 
   const findVerificationCode = await prisma.userVerification.findMany({
@@ -39,17 +41,9 @@ export const requestNewVerification = async (
     to: email,
     subject: "Verify your email address",
     html: `<p>Verify your email address to complete registration.</p><p>This link will <b>expires in 24 hours</b></p><p>
-            <a href="http://localhost:3000/user/verify/${userId}/${response.verificationCode}">Verify Email</a>
+            <a style="text-decoration: none; color: white; border-radius: 5px; width: fit-content; background:#1C2534; display:block; padding: 10px" href="http://localhost:3000/user/verify/${userId}/${response.verificationCode}">Verify Email</a>
           </p>`,
   };
 
-  await new Promise((resolve, reject) => {
-    transport.sendMail(message, (err, info) => {
-      if (err) {
-        console.log(err);
-      } else {
-        resolve(info);
-      }
-    });
-  });
+  transport.sendMail(message);
 };
