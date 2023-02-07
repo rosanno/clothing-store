@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import axiosClient from "../config/axiosClient";
 import { useSession } from "next-auth/react";
+import Loader from "./Loader/Loader";
 
 const ProductCard = (props: Products) => {
   const router = useRouter();
@@ -42,6 +43,10 @@ const ProductCard = (props: Products) => {
       console.log(err);
     }
   };
+
+  if (loading) {
+    <Loader />;
+  }
 
   return (
     <div className="flex flex-col">
