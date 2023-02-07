@@ -53,7 +53,7 @@ export default async function handler(
           to: email,
           subject: "Reset password",
           html: `<p>Click the link to reset your password.</p><p>This link will <b>expires in 24 hours</b></p><p>
-                        <a style="text-decoration: none; color: white; border-radius: 5px; width: fit-content; background:#1C2534; display:block; padding: 10px" href="http://localhost:3000/resetpassword/${findUser.id}/${resetToken}">Reset password</a>
+                        <a style="text-decoration: none; color: white; border-radius: 5px; width: fit-content; background:#1C2534; display:block; padding: 10px" href="${process.env.NEXT_PUBLIC_BASE_URL}/resetpassword/${findUser.id}/${resetToken}">Reset password</a>
                       </p>`,
         };
 

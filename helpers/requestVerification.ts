@@ -41,7 +41,7 @@ export const requestNewVerification = async (
     to: email,
     subject: "Verify your email address",
     html: `<p>Verify your email address to complete registration.</p><p>This link will <b>expires in 24 hours</b></p><p>
-            <a style="text-decoration: none; color: white; border-radius: 5px; width: fit-content; background:#1C2534; display:block; padding: 10px" href="http://localhost:3000/user/verify/${userId}/${response.verificationCode}">Verify Email</a>
+            <a style="text-decoration: none; color: white; border-radius: 5px; width: fit-content; background:#1C2534; display:block; padding: 10px" href="${process.env.NEXT_PUBLIC_BASE_URL}/user/verify/${userId}/${response.verificationCode}">Verify Email</a>
           </p>`,
   };
 
