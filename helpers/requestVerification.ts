@@ -10,8 +10,8 @@ export const requestNewVerification = async (
   const transport = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "msy40953@gmail.com",
-      pass: "hizjchtgvyzxblda",
+      user: process.env.NEXT_PUBLIC_GMAIL_ADDRESS,
+      pass: process.env.NEXT_PUBLIC_GMAIL_APP_PASSWORD,
     },
   });
   const hashCode = await verificationCode(name);

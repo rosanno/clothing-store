@@ -254,24 +254,29 @@ const Signup = () => {
               </p>
             )}
           </div>
-          {loading ? (
-            <div className="flex justify-center">
-              <Oval
-                height={25}
-                width={25}
-                color="#9387d4"
-                wrapperStyle={{}}
-                wrapperClass=""
-                visible={true}
-                ariaLabel="oval-loading"
-                secondaryColor="#28b1ec"
-                strokeWidth={2}
-                strokeWidthSecondary={2}
-              />
-            </div>
-          ) : (
-            <span className="block py-1">Sign up</span>
-          )}
+          <button
+            type="submit"
+            className="bg-[#1C2534] w-full text-white py-2 rounded-md mt-6 font-poppins"
+          >
+            {loading ? (
+              <div className="flex justify-center">
+                <Oval
+                  height={25}
+                  width={25}
+                  color="#9387d4"
+                  wrapperStyle={{}}
+                  wrapperClass=""
+                  visible={true}
+                  ariaLabel="oval-loading"
+                  secondaryColor="#28b1ec"
+                  strokeWidth={2}
+                  strokeWidthSecondary={2}
+                />
+              </div>
+            ) : (
+              <span className="block py-1">Sign up</span>
+            )}
+          </button>
         </form>
         <p className="text-gray-400 text-sm mt-2">
           Have an account?{" "}
