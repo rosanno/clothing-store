@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { AiFillStar, AiFillHeart, AiOutlineHeart } from "react-icons/ai";
+import React, { useState } from "react";
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import axiosClient from "../config/axiosClient";
@@ -9,9 +9,11 @@ const ProductCard = (props: Products) => {
   const router = useRouter();
   const ratings = 4.0;
   const { data: sessions, status }: any = useSession();
+  const [loading, setLoading] = useState(false);
 
   const handleFovorites = async (productId: string) => {
     try {
+      setLoading(true);
       if (status !== "unauthenticated") {
         console.log(status);
         await axiosClient.post("users/favorite", { productId });
@@ -19,18 +21,25 @@ const ProductCard = (props: Products) => {
       } else {
         router.push("/login");
       }
+      setLoading(false);
     } catch (err) {
       console.log(err);
     }
   };
 
   const handleRemoveFavorite = async (productId: string) => {
-    const res = await axiosClient.delete("users/favorite", {
-      data: { productId },
-    });
+    try {
+      setLoading(true);
+      const res = await axiosClient.delete("users/favorite", {
+        data: { productId },
+      });
 
-    if (res.status === 200) {
-      router.push(router.asPath);
+      setLoading(false);
+      if (res.status === 200) {
+        router.push(router.asPath);
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -54,20 +63,25 @@ const ProductCard = (props: Products) => {
             ${parseFloat(props.price).toLocaleString()}
           </span>
         </div>
-        <div className="cursor-pointer">
+        <div>
           {props.favorites?.isFavorite &&
           sessions?.user.id === props.favorites.userId ? (
-            <AiFillHeart
-              size={20}
-              className="text-rose-400"
+            <button
+              disabled={loading ? true : false}
               onClick={() => handleRemoveFavorite(props.id)}
-            />
+            >
+              <AiFillHeart size={20} className="text-rose-400" />
+            </button>
           ) : (
-            <AiOutlineHeart
-              size={20}
-              className="text-gray-400 hover:text-rose-400"
+            <button
+              disabled={loading ? true : false}
               onClick={() => handleFovorites(props.id)}
-            />
+            >
+              <AiOutlineHeart
+                size={20}
+                className="text-gray-400 hover:text-rose-400"
+              />
+            </button>
           )}
         </div>
       </div>
